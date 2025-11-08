@@ -8,6 +8,8 @@ const app = express();
 connectDB();
 dotenv.config();
 
+app.use(express.json());    
+
 app.use("/api/tasks",taskRoute);
 app.listen(PORT,()=>{
     console.log(`The server is listening on ${PORT} `);
