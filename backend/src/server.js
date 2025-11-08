@@ -5,14 +5,16 @@ import dotenv from 'dotenv';
 
 const PORT = process.env.PORT || 5001
 const app = express();
-connectDB();
+
 dotenv.config();
 
 app.use(express.json());    
 
 app.use("/api/tasks",taskRoute);
+connectDB().then(()=>{
 app.listen(PORT,()=>{
     console.log(`The server is listening on ${PORT} `);
-}
-);
+    });
+});
+
 
