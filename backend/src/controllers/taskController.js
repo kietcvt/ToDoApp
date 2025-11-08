@@ -3,7 +3,7 @@ import Task  from "../models/Task.js";
 
 export const getAllTask = async(req,res)=>{
    try {
-    const tasks = await Task.find();
+    const tasks = await Task.find().sort({createdAt: -1});
 
     res.status(200).json(tasks);
    } catch (error) {
