@@ -6,6 +6,8 @@ import NotFound from "./pages/NotFound";
 function App() {
   return (
     <>
+    <Toaster/>
+    
       <BrowserRouter>
         <Routes>
           <Route
