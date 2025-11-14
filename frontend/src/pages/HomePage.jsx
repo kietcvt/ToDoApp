@@ -31,6 +31,10 @@ const HomePage = () => {
     }
   };
 
+const handleTaskChanged = ()=>{
+  fetchTasks();
+}
+
 // biến
   const filteredTasks = taskBuffer.filter((task)=>{
     switch(filter){
@@ -62,7 +66,9 @@ const HomePage = () => {
           <Header />
 
           {/* Tạo nhiệm vụ */}
-          <AddTask />
+          <AddTask
+          handleNewTaskAdded = {handleTaskChanged}
+          />
 
           {/* Thống kê và bộ lọc */}
           <StatsAndFilters
