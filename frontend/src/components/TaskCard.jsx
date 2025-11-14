@@ -9,6 +9,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { Input } from "./ui/input";
+import { cn } from "@/lib/utils";
 
 const TaskCard = ({ task, index }) => {
   let isEditting = false;
