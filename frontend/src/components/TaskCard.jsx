@@ -14,11 +14,11 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 
 const TaskCard = ({ task, index, handleTaskChanged }) => {
-  const [isEditting,setIsEditting] = useState(false);
-  const [updateTaskTitle,setUpdateTaskTitle] = useState(task.title || "");
+  const [isEditting, setIsEditting] = useState(false);
+  const [updateTaskTitle, setUpdateTaskTitle] = useState(task.title || "");
 
-  const handleKeyPress = (event)=>{
-    if((event.key) == "Enter"){
+  const handleKeyPress = (event) => {
+    if (event.key == "Enter") {
       updateTaskTitle();
     }
   };
@@ -34,21 +34,41 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
     }
   };
 
-    const updateTask = async()=>{
-      try{
+  const updateTask = async () => {
+    try {
       setIsEditting(false);
-      await api.put(`/tasks/${task._id}`,{
-        title:updateTaskTitle
+      await api.put(`/tasks/${task._id}`, {
+        title: updateTaskTitle,
       });
       handleTaskChanged();
-      toast.success(`Nhiệm vụ đã đổi thành ${updateTaskTitle}`)
-    }
-    catch(error){
+      toast.success(`Nhiệm vụ đã đổi thành ${updateTaskTitle}`);
+    } catch (error) {
       onsole.error("lỗi xảy ra khi update task: ", error);
       toast.error("Lỗi xảy ra khi update task");
     }
-  }
-
+  };
+  const toggleTaskCompleteButton = async () => {
+    try {
+      if (task.status === "active") {
+        await api.put(`/tasks/${task._id}`, {
+          status: "complete",
+          completedAt: new Date().toISOString(),
+        });
+        handleTaskChanged();
+        toast.success(`${task.title} đã hoàn thành`);
+      } else {
+        await api.put(`/tasks/${task._id}`, {
+          status: "active",
+          completedAt: null,
+        });
+        handleTaskChanged();
+        toast.success(`${task.title} đã quay lại trạng thái chưa hoàn thành`);
+      }
+    } catch (error) {
+      console.error("không thể đánh dấu", error);
+      toast.error("không thể đánh dấu");
+    }
+  };
 
   return (
     <Card
@@ -69,6 +89,7 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
               ? "text-success hover:text-success/80"
               : "text-muted-foreground hover:text-primary"
           )}
+          onClick={toggleTaskCompleteButton}
         >
           {task.status === "complete" ? (
             <CheckCircle2 className="size-5" />
@@ -83,14 +104,13 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
               placeholder="Cần phải làm gì?"
               className="flex-1 h-12 text-base border-border/50 focus:border-primary/50 focus:ring-primary/20"
               type="text"
-              value = {updateTaskTitle}
-              onChange={(e)=> setUpdateTaskTitle(e.target.value)}
-              onKeyPress={handleKeyPress}   
-              onBlur={()=>{
+              value={updateTaskTitle}
+              onChange={(e) => setUpdateTaskTitle(e.target.value)}
+              onKeyPress={handleKeyPress}
+              onBlur={() => {
                 setIsEditting(false);
-                setUpdateTaskTitle(task.title || "")
+                setUpdateTaskTitle(task.title || "");
               }}
-
             />
           ) : (
             <p
@@ -129,7 +149,7 @@ const TaskCard = ({ task, index, handleTaskChanged }) => {
             variant="ghost"
             size="icon"
             className="flex-shrink-0 transition-colors size-8 text-muted-foreground hover:text-info"
-            onClick = {()=>{
+            onClick={() => {
               setIsEditting(true);
               setUpdateTaskTitle(task.title || "");
             }}
