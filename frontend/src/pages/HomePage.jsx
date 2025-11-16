@@ -5,10 +5,11 @@ import Header from "@/components/Header";
 import StatsAndFilters from "@/components/StatsAndFilters";
 import TaskList from "@/components/TaskList";
 import TaskListPagination from "@/components/TaskListPagination";
+import api from "@/lib/axios";
 import React, { useEffect, useState } from "react";
 import { useHref, useSearchParams } from "react-router";
 import { toast } from "sonner";
-import axios from "axios";
+
 const HomePage = () => {
   const [taskBuffer, setTaskBuffer] = useState([]);
   const [activeTaskCount, setActiveTaskCount] = useState([]);
@@ -20,7 +21,7 @@ const HomePage = () => {
   //logic
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5001/api/tasks");
+      const res = await api.get("/tasks");
       setTaskBuffer(res.data.tasks);
       setActiveTaskCount(res.data.activeCount);
       setCompleteTaskCount(res.data.completeCount);
@@ -82,6 +83,7 @@ const handleTaskChanged = ()=>{
           <TaskList 
           filteredTasks={filteredTasks} 
           filter={filter}
+          handleTaskChanged={handleTaskChanged}
           />
 
           {/* Phân trang và lọc theo page */}

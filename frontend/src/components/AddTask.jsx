@@ -5,13 +5,14 @@ import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
+import api from "@/lib/axios";
 
 const AddTask = ({handleNewTaskAdded}) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const addTask = async()=>{
     if(newTaskTitle.trim()){
       try {
-        await axios.post("http://localhost:5001/api/tasks",{title:newTaskTitle})
+        await api.post("/tasks",{title:newTaskTitle})
         toast.success(`Nhiệm vụ ${newTaskTitle} được thêm vào`)
         handleNewTaskAdded();
       } catch (error) {
@@ -42,7 +43,13 @@ const AddTask = ({handleNewTaskAdded}) => {
         onKeyPress = {handleKeyPress}
         />
 
-        <Button variant="gradient" size="default" className="px-4" onClick ={addTask}>
+        <Button 
+        variant="gradient" 
+        size="default" 
+        className="px-4" 
+        onClick ={addTask}
+        disabled = {!newTaskTitle.trim()}
+        >
           <Plus className="size-4" />
           Thêm
         </Button>

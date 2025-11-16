@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import {
@@ -10,9 +10,46 @@ import {
 } from "lucide-react";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
+import api from "@/lib/axios";
+import { toast } from "sonner";
 
-const TaskCard = ({ task, index }) => {
-  let isEditting = false;
+const TaskCard = ({ task, index, handleTaskChanged }) => {
+  const [isEditting,setIsEditting] = useState(false);
+  const [updateTaskTitle,setUpdateTaskTitle] = useState(task.title || "");
+
+  const handleKeyPress = (event)=>{
+    if((event.key) == "Enter"){
+      updateTaskTitle();
+    }
+  };
+
+  const deleteTask = async (taskId) => {
+    try {
+      await api.delete(`/tasks/${taskId}`);
+      toast.success("Nhiệm vụ đã xóa");
+      handleTaskChanged();
+    } catch (error) {
+      console.error("lỗi xảy ra khi xóa task: ", error);
+      toast.error("Lỗi xảy ra khi xóa task");
+    }
+  };
+
+    const updateTask = async()=>{
+      try{
+      setIsEditting(false);
+      await api.put(`/tasks/${task._id}`,{
+        title:updateTaskTitle
+      });
+      handleTaskChanged();
+      toast.success(`Nhiệm vụ đã đổi thành ${updateTaskTitle}`)
+    }
+    catch(error){
+      onsole.error("lỗi xảy ra khi update task: ", error);
+      toast.error("Lỗi xảy ra khi update task");
+    }
+  }
+
+
   return (
     <Card
       className={cn(
@@ -46,6 +83,14 @@ const TaskCard = ({ task, index }) => {
               placeholder="Cần phải làm gì?"
               className="flex-1 h-12 text-base border-border/50 focus:border-primary/50 focus:ring-primary/20"
               type="text"
+              value = {updateTaskTitle}
+              onChange={(e)=> setUpdateTaskTitle(e.target.value)}
+              onKeyPress={handleKeyPress}   
+              onBlur={()=>{
+                setIsEditting(false);
+                setUpdateTaskTitle(task.title || "")
+              }}
+
             />
           ) : (
             <p
@@ -84,6 +129,10 @@ const TaskCard = ({ task, index }) => {
             variant="ghost"
             size="icon"
             className="flex-shrink-0 transition-colors size-8 text-muted-foreground hover:text-info"
+            onClick = {()=>{
+              setIsEditting(true);
+              setUpdateTaskTitle(task.title || "");
+            }}
           >
             <SquarePen className="size-4" />
           </Button>
@@ -92,6 +141,7 @@ const TaskCard = ({ task, index }) => {
             variant="ghost"
             size="icon"
             className="flex-shrink-0 transition-colors size-8 text-muted-foreground hover:text-destructive"
+            onClick={() => deleteTask(task._id)}
           >
             <Trash2 className="size-4" />
           </Button>
