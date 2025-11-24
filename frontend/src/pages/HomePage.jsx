@@ -69,11 +69,24 @@ const HomePage = () => {
     (page - 1) * visibleTaskLimit,
     page * visibleTaskLimit
   );
-   if (visibleTasks.length === 0) {
-     handlePrev();
-   };
-
   const totalPages = Math.ceil(filteredTasks.length / visibleTaskLimit); // tong so trang = tong so nv / so trang limit
+
+  useEffect(() => {
+    if (totalPages === 0) {
+      // Nếu không có trang nào thì luôn để page = 1 cho an toàn
+      if (page !== 1) setPage(1);
+      return;
+    }
+
+    // Nếu page vượt quá totalPages thì kéo về trang cuối cùng
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+    // Nếu page < 1 thì đưa về 1 (chỉ để phòng hờ)
+    if (page < 1) {
+      setPage(1);
+    }
+  }, [page, totalPages]);
 
   return (
     <div className="min-h-screen w-full bg-white relative">
@@ -88,7 +101,7 @@ const HomePage = () => {
         }}
       />
       <div className="container pt-8 mx-auto relative z-10">
-        <div className="w-full max-w-2xl p-6 mx-auto space-y-6">
+        <div className="w-full max-w-2xl mx-auto space-y-7 sm:space-y-8 rounded-2xl bg-white/80 p-6 shadow-lg backdrop-blur-sm">
           {/* Đầu trang */}
           <Header />
 
@@ -111,14 +124,16 @@ const HomePage = () => {
           />
 
           {/* Phân trang và lọc theo page */}
-          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <TaskListPagination
-              handleNext={handleNext}
-              handlePrev={handlePrev}
-              handlePageChange={handlePageChange}
-              page={page}
-              totalPages={totalPages}
-            />
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row sm:gap-6">
+            <div className="flex items-center gap-2 rounded-lg bg-white/70 px-3 py-2 shadow-sm backdrop-blur-sm">
+              <TaskListPagination
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                handlePageChange={handlePageChange}
+                page={page}
+                totalPages={totalPages}
+              />
+            </div>
 
             <DateTimeFilter dateQuery={dateQuery} setDateQuery={setDateQuery} />
           </div>
