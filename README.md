@@ -1,6 +1,6 @@
 # ToDoApp
 
-Ứng dụng quản lý công việc (ToDo) fullstack gồm **backend Node.js/Express + MongoDB** và **frontend React/Vite/TailwindCSS**.
+Ứng dụng quản lý công việc (ToDo) fullstack đơn giản gồm **backend Node.js/Express + MongoDB** và **frontend React/Vite/TailwindCSS**.
 
 ## Tính năng chính
 
