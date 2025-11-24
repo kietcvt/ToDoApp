@@ -2,7 +2,7 @@ export const FilterType = {
     all: "Tất cả",
     active: "Đang làm",
     completed: "Hoàn thành"
-}
+};
 
 export const options = [
     {
@@ -22,3 +22,4 @@ export const options = [
         label:"Tất cả",
     },
 ];
+export const visibleTaskLimit = 4;
