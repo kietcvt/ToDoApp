@@ -38,7 +38,7 @@ Thư mục chính:
 ### Backend
 - **Node.js**, **Express**
 - **MongoDB**, **Mongoose**
-- **dotenv** để quản lý biến môi trường
+- **.env** để quản lý biến môi trường
 - **cors** để cho phép frontend truy cập API
 
 ### Frontend
