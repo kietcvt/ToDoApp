@@ -1,0 +1,33 @@
+name: Todoapp-dev
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
+    ports:
+      - 5001:5001
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - todoapp
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - todoapp
+
+networks:
+  todoapp:
+    driver: bridge
