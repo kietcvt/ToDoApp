@@ -2,6 +2,41 @@
 
 Ứng dụng quản lý công việc (ToDo) fullstack đơn giản gồm **backend Node.js/Express + MongoDB** và **frontend React/Vite/TailwindCSS**.
 
+## Cấu trúc thư mục
+
+```
+ToDoApp/
+├── docker-compose.dev.yml
+├── docker-compose.yml
+├── README.md
+├── backend/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── src/
+│       ├── server.js
+│       ├── config/
+│       │   └── db.js
+│       ├── controllers/
+│       │   └── taskController.js
+│       ├── models/
+│       │   └── Task.js
+│       └── routes/
+│           └── taskRouters.js
+├── frontend/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── public/
+│   └── src/
+│       ├── App.jsx
+│       ├── main.jsx
+│       ├── components/
+│       ├── lib/
+│       └── pages/
+└── .dist/
+```
+
 ## Tính năng chính
 
 - **Quản lý nhiệm vụ**
@@ -121,6 +156,37 @@ npm run build
 ```
 
 Đầu ra build production sẽ nằm trong thư mục `frontend/dist`.
+
+## Chạy với Docker
+
+Dự án hỗ trợ chạy bằng Docker Compose để dễ dàng triển khai.
+
+### Yêu cầu
+
+- **Docker** và **Docker Compose**
+- **MongoDB** đang chạy trên máy host (hoặc cấu hình MONGODB_URI phù hợp)
+
+### Chạy development
+
+```bash
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+Frontend sẽ chạy ở `http://localhost:5173`, backend ở `http://localhost:5001`.
+
+### Chạy production
+
+```bash
+docker-compose up --build
+```
+
+Frontend sẽ chạy ở `http://localhost:80`.
+
+Để dừng:
+
+```bash
+docker-compose down
+```
 
 ---
 
